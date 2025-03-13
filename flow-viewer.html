@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow Diagram Viewer</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/reactflow@11/dist/reactflow.js"></script>
+    <link href="https://unpkg.com/reactflow@11/dist/style.css" rel="stylesheet" />
+    <style>
+        html, body, #root {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .react-flow__node {
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-family: system-ui;
+        }
+        .react-flow__node-input {
+            background: #6ede87;
+            color: white;
+        }
+        .react-flow__node-output {
+            background: #ff0072;
+            color: white;
+        }
+        .react-flow__node-decision {
+            background: #ffb930;
+            color: white;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script>
+        const { useCallback } = React;
+        const { ReactFlow, Background, Controls } = ReactFlowRenderer;
+
+        const initialNodes = [
+            {
+                id: 'start',
+                type: 'input',
+                position: { x: 100, y: 100 },
+                data: { label: 'Start' }
+            },
+            {
+                id: 'process',
+                type: 'default',
+                position: { x: 100, y: 200 },
+                data: { label: 'Process Data' }
+            },
+            {
+                id: 'decision',
+                type: 'decision',
+                position: { x: 100, y: 300 },
+                data: { label: 'Check Result' }
+            },
+            {
+                id: 'end',
+                type: 'output',
+                position: { x: 100, y: 400 },
+                data: { label: 'End' }
+            }
+        ];
+
+        const initialEdges = [
+            { id: 'e1', source: 'start', target: 'process' },
+            { id: 'e2', source: 'process', target: 'decision' },
+            { id: 'e3', source: 'decision', target: 'end' }
+        ];
+
+        function Flow() {
+            const nodeTypes = useCallback(() => ({
+                decision: ({ data }) => (
+                    <div className="react-flow__node-decision">
+                        {data.label}
+                    </div>
+                ),
+            }), []);
+
+            return React.createElement(ReactFlow, {
+                nodes: initialNodes,
+                edges: initialEdges,
+                nodeTypes: nodeTypes,
+                fitView: true,
+                children: [
+                    React.createElement(Background),
+                    React.createElement(Controls)
+                ]
+            });
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(React.createElement(Flow));
+    </script>
+</body>
+</html>

@@ -1,11 +1,13 @@
 {
   "name": "mcp-flow",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "MCP server for flow diagram creation and management",
+  "main": "build/index.js",
+  "type": "module",
   "scripts": {
     "dev": "webpack serve --mode development",
     "build": "webpack --mode production",
+    "build:server": "tsc -p tsconfig.server.json && chmod +x build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
